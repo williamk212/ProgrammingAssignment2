@@ -1,33 +1,51 @@
-## Put comments here that give an overall description of what your
-## functions do
+## R Programming class by RPeng
+##
+## Assignment 2
+##
+## @author william.keung
+## email: williamk212 [at] gmail [dot] com
+##
 
-## Write a short comment describing this function
-
+## The makeCacheMatrix function is simply a container that
+## holds references to:
+## * the original matrix
+## * the inverse of the original matrix
+## * methods 'getsolve', 'setsolve' to retrieve cache
 makeCacheMatrix <- function(x = matrix()) {
-  m <- NULL
+  inv_matrix <- NULL
   set <- function(y) {
     x <<- y
-    m <<- NULL
+    inv_matrix <<- NULL
   }
   get <- function() x
-  setsolve <- function(solve) m <<- solve
-  getsolve <- function() m
+  setsolve <- function(solve) inv_matrix <<- solve
+  # if called, just return inversed matrix
+  getsolve <- function() inv_matrix
   list(set = set, get = get, setsolve = setsolve,
        getsolve = getsolve)
 }
 
 
-## Write a short comment describing this function
-
+## The 'cacheSolve' function gets and sets the cache. 
+## If there is no inversed matrix set in the cache, the function
+## will solve and calculate the inverse matrix and set the cache.
+##
+## The argument to this function should be the container 
+## function type defined above: 'makeCacheMatrix'
+##
+## Example:
+## > cached_matrix <- makeCacheMatrix(simple_matrix)
+## > cacheSolve(cached_matrix)
+##
 cacheSolve <- function(x, ...) {
-  ## Return a matrix that is the inverse of 'x'
-  m <- x$getsolve()
-  if (!is.null(m)) {
+  # Return a matrix that is the inverse of 'x'
+  inv_matrix <- x$getsolve()
+  if (!is.null(inv_matrix)) {
     message("getting cached data")
-    return(m)
+    return(inv_matrix)
   }
   data <- x$get()
-  m <- solve(data, ...)
-  x$setsolve(m)
-  m
+  inv_matrix <- solve(data, ...)
+  x$setsolve(inv_matrix)
+  inv_matrix
 }
